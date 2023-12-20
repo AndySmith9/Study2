@@ -1,0 +1,77 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+       xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:tx="http://www.springframework.org/schema/tx"
+       xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans.xsd http://www.alibaba.com/schema/stat http://www.alibaba.com/schema/stat.xsd http://www.springframework.org/schema/mvc http://www.springframework.org/schema/mvc/spring-mvc.xsd http://www.springframework.org/schema/tx http://www.springframework.org/schema/tx/spring-tx.xsd">
+
+
+<bean id="propertyConfigurer" class="org.springframework.beans.factory.config.PropertyPlaceholderConfigurer">
+<property name="ignoreUnresolvablePlaceholders" value="true"></property>
+<property name="locations">
+<list>
+<value>classpath:db.properties</value>
+</list>
+</property>
+</bean>
+
+   <!--  druid -->
+    <bean id="stat-filter" class="com.alibaba.druid.filter.stat.StatFilter">
+        <property name="slowSqlMillis" value="3000" />
+        <property name="logSlowSql" value="true" />
+        <property name="mergeSql" value="true" />
+    </bean>
+    <bean id="wall-filter" class="com.alibaba.druid.wall.WallFilter">
+        <property name="dbType" value="mysql" />
+    </bean>
+
+
+<!-- https://github.com/alibaba/druid/wiki/DruidDataSource%E9%85%8D%E7%BD%AE%E5%B1%9E%E6%80%A7%E5%88%97%E8%A1%A8 -->
+<bean id="dataSource" class="com.alibaba.druid.pool.DruidDataSource" init-method="init" destroy-method="close">
+<property name="driverClassName" value="${driverClassName}"/>
+<property name="url" value="${url}"/>
+<property name="username" value="${username}"/>
+<property name="password" value="${password}"/>
+<property name="initialSize" value="${initialSize}"/>
+<property name="minIdle" value="${minIdle}"/>
+<property name="maxActive" value="${maxActive}"/>
+<property name="maxWait" value="${maxWait}"/>
+<property name="filters" value="${filters}"/>
+<property name="testWhileIdle" value="true"></property>
+<property name="validationQuery" value="select 1"></property>
+</bean>
+
+
+
+<!-- mybatis -->
+<bean id="sqlSessionFactory" class="org.mybatis.spring.SqlSessionFactoryBean">
+<property name="configLocation" value="classpath:mybatis-config.xml"></property>
+<property name="dataSource" ref="dataSource"></property>
+<!-- <property name="dataSource" value="dataSource"></property>  value抛异常  -->
+<property name="mapperLocations" value="classpath:mapper/*.xml"></property>
+</bean>
+<bean class="org.mybatis.spring.mapper.MapperScannerConfigurer">
+<property name="basePackage" value="com.mmall.dao"/>
+<property name="sqlSessionFactoryBeanName" value="sqlSessionFactory"/>
+<!-- <property name="sqlSessionFactoryBeanName" ref="sqlSessionFactory"/>   ref抛异常    -->
+</bean>
+
+
+<!--     tx -->
+    <bean id="transactionManager" class="org.springframework.jdbc.datasource.DataSourceTransactionManager">
+        <property name="dataSource" ref="dataSource" />
+      <!--    <property name="dataSource" value="dataSource" />  value抛异常 -->
+    </bean>
+
+    <tx:annotation-driven transaction-manager="transactionManager" />
+
+
+<!-- 
+Q:注入dataSource使用的是ref,注入sqlSessionFactory使用的是value
+A:ref取值是对象实例，value取值是字符串常量.
+String sqlSessionFactoryBeanName;
+DataSource dataSource;
+ -->
+
+
+
+
+</beans>
