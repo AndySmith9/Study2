@@ -39,5 +39,6 @@
     <factorypathentry kind="VARJAR" id="M2_REPO/com/fasterxml/jackson/core/jackson-core/2.9.6/jackson-core-2.9.6.jar" enabled="true" runInBatchMode="false"/>
     <factorypathentry kind="VARJAR" id="M2_REPO/com/fasterxml/jackson/core/jackson-annotations/2.9.6/jackson-annotations-2.9.6.jar" enabled="true" runInBatchMode="false"/>
     <factorypathentry kind="VARJAR" id="M2_REPO/com/fasterxml/jackson/core/jackson-databind/2.9.6/jackson-databind-2.9.6.jar" enabled="true" runInBatchMode="false"/>
+    <factorypathentry kind="VARJAR" id="M2_REPO/com/google/guava/guava/15.0/guava-15.0.jar" enabled="true" runInBatchMode="false"/>
     <factorypathentry kind="PLUGIN" id="org.eclipse.jst.ws.annotations.core" enabled="false" runInBatchMode="false"/>
 </factorypath>

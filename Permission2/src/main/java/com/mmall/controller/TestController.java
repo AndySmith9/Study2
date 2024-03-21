@@ -108,8 +108,8 @@ public class TestController {
 		
 		
 		  SysAclModuleMapper moduleMapper =
-		  ApplicationContextHelper.popBean(SysAclModuleMapper.class); SysAclModule
-		  module = moduleMapper.selectByPrimaryKey(1);
+		  ApplicationContextHelper.popBean(SysAclModuleMapper.class); 
+		  SysAclModule module = moduleMapper.selectByPrimaryKey(1);
 		  log.info(JsonMapper.obj2String(module));
 		 
 		 
