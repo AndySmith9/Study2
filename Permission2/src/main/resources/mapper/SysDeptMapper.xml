@@ -87,12 +87,12 @@
       order by ${orderByClause}
     </if>
   </select>
-  <select id="selectByPrimaryKey" parameterType="java.lang.Integer" resultMap="BaseResultMap">
+<!--   <select id="selectByPrimaryKey" parameterType="java.lang.Integer" resultMap="BaseResultMap">
     select 
     <include refid="Base_Column_List" />
     from sys_dept
     where id = #{id,jdbcType=INTEGER}
-  </select>
+  </select> -->
   <delete id="deleteByPrimaryKey" parameterType="java.lang.Integer">
     delete from sys_dept
     where id = #{id,jdbcType=INTEGER}
@@ -113,7 +113,7 @@
       #{operator,jdbcType=VARCHAR}, #{operateTime,jdbcType=TIMESTAMP}, #{operateIp,jdbcType=VARCHAR}
       )
   </insert>
-  <insert id="insertSelective" parameterType="com.mmall.model.SysDept">
+<!--   <insert id="insertSelective" parameterType="com.mmall.model.SysDept">
     insert into sys_dept
     <trim prefix="(" suffix=")" suffixOverrides=",">
       <if test="id != null">
@@ -173,7 +173,7 @@
         #{operateIp,jdbcType=VARCHAR},
       </if>
     </trim>
-  </insert>
+  </insert> -->
   <select id="countByExample" parameterType="com.mmall.model.SysDeptExample" resultType="java.lang.Long">
     select count(*) from sys_dept
     <if test="_parameter != null">
@@ -260,7 +260,128 @@
     </set>
     where id = #{id,jdbcType=INTEGER}
   </update>
-  <update id="updateByPrimaryKey" parameterType="com.mmall.model.SysDept">
+<!--   <update id="updateByPrimaryKey" parameterType="com.mmall.model.SysDept">
+    update sys_dept
+    set name = #{name,jdbcType=VARCHAR},
+      parent_id = #{parentId,jdbcType=INTEGER},
+      level = #{level,jdbcType=VARCHAR},
+      seq = #{seq,jdbcType=INTEGER},
+      remark = #{remark,jdbcType=VARCHAR},
+      operator = #{operator,jdbcType=VARCHAR},
+      operate_time = #{operateTime,jdbcType=TIMESTAMP},
+      operate_ip = #{operateIp,jdbcType=VARCHAR}
+    where id = #{id,jdbcType=INTEGER}
+  </update> -->
+  
+  
+  
+  
+  
+  
+<!--     <select id="countByNameAndParentId" parameterType="map" resultType="int">
+    SELECT count(1)
+    FROM sys_dept
+    WHERE name = #{name}
+    <if test="parentId != null">
+      AND parent_id = #{parentId}
+    </if>
+    <if test="id != null">
+      AND id != #{id}
+    </if>
+  </select> -->
+      <select id="countByNameAndParentId1" parameterType="map" resultType="int">
+    SELECT count(1)
+    FROM sys_dept
+    WHERE name = #{name}
+      AND parent_id = #{parentId}
+  </select>
+    <select id="selectByPrimaryKey" parameterType="java.lang.Integer" resultMap="BaseResultMap">
+    select 
+    <include refid="Base_Column_List" />
+    from sys_dept
+    where id = #{id,jdbcType=INTEGER}
+  </select>
+    <insert id="insertSelective" parameterType="com.mmall.model.SysDept">
+    insert into sys_dept
+    <trim prefix="(" suffix=")" suffixOverrides=",">
+      <if test="id != null">
+        id,
+      </if>
+      <if test="name != null">
+        name,
+      </if>
+      <if test="parentId != null">
+        parent_id,
+      </if>
+      <if test="level != null">
+        level,
+      </if>
+      <if test="seq != null">
+        seq,
+      </if>
+      <if test="remark != null">
+        remark,
+      </if>
+      <if test="operator != null">
+        operator,
+      </if>
+      <if test="operateTime != null">
+        operate_time,
+      </if>
+      <if test="operateIp != null">
+        operate_ip,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides=",">
+      <if test="id != null">
+        #{id,jdbcType=INTEGER},
+      </if>
+      <if test="name != null">
+        #{name,jdbcType=VARCHAR},
+      </if>
+      <if test="parentId != null">
+        #{parentId,jdbcType=INTEGER},
+      </if>
+      <if test="level != null">
+        #{level,jdbcType=VARCHAR},
+      </if>
+      <if test="seq != null">
+        #{seq,jdbcType=INTEGER},
+      </if>
+      <if test="remark != null">
+        #{remark,jdbcType=VARCHAR},
+      </if>
+      <if test="operator != null">
+        #{operator,jdbcType=VARCHAR},
+      </if>
+      <if test="operateTime != null">
+        #{operateTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="operateIp != null">
+        #{operateIp,jdbcType=VARCHAR},
+      </if>
+    </trim>
+  </insert>
+    <select id="getChildDeptListByLevel" resultMap="BaseResultMap">
+    select
+    <include refid="Base_Column_List" />
+    from sys_dept
+ <!--    WHERE level like #{level} || '.%' -->
+    WHERE level like concat(#{level},'.%')
+  </select>
+    <update id="batchUpdateLevel" parameterType="map">
+    <foreach collection="sysDeptList" item="dept" separator=";">
+      UPDATE sys_dept
+      SET level = #{dept.level}
+      WHERE id = #{dept.id}
+    </foreach>
+  </update>
+      <update id="updateLevel" parameterType="map">
+    update sys_dept
+    set level = #{level,jdbcType=VARCHAR}
+    where id = #{id,jdbcType=INTEGER}
+  </update>
+    <update id="updateByPrimaryKey" parameterType="com.mmall.model.SysDept">
     update sys_dept
     set name = #{name,jdbcType=VARCHAR},
       parent_id = #{parentId,jdbcType=INTEGER},
@@ -272,4 +393,20 @@
       operate_ip = #{operateIp,jdbcType=VARCHAR}
     where id = #{id,jdbcType=INTEGER}
   </update>
+    <select id="countByParentId" parameterType="int" resultType="int">
+    SELECT count(1)
+    FROM sys_dept
+    WHERE parent_id = #{deptId}
+  </select>
+    <select id="getAllDept" resultMap="BaseResultMap">
+    select
+    <include refid="Base_Column_List" />
+    from sys_dept
+  </select>
+      <select id="getChildDeptListById" parameterType="int" resultMap="BaseResultMap">
+    select
+    <include refid="Base_Column_List" />
+    from sys_dept
+    WHERE parent_id = #{id}
+  </select>
 </mapper>
