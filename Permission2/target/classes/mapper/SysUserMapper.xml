@@ -458,6 +458,24 @@
     ORDER BY username ASC
     LIMIT #{page.offset}, #{page.pageSize}
   </select>
+      <select id="countByDeptIdList" parameterType="list" resultType="int">
+    SELECT count(1)
+    FROM sys_user
+    WHERE dept_id in
+    <foreach open="(" close=")" separator="," collection="deptIdList" item="deptId">
+    #{deptId}
+    </foreach>
+  </select>
+    <select id="getPageByDeptIdList" parameterType="map" resultMap="BaseResultMap">
+    SELECT <include refid="Base_Column_List" />
+    FROM sys_user
+    WHERE dept_id in
+    <foreach open="(" close=")" separator="," collection="deptIdList" item="deptId">
+    #{deptId}
+    </foreach>
+    ORDER BY username ASC
+    LIMIT #{page.offset}, #{page.pageSize}
+  </select>
     <select id="getAll" resultMap="BaseResultMap">
     SELECT <include refid="Base_Column_List" />
     FROM sys_user

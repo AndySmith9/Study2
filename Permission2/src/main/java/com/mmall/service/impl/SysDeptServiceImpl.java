@@ -1,5 +1,6 @@
 package com.mmall.service.impl;
 
+import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
@@ -47,8 +48,6 @@ public class SysDeptServiceImpl implements SysDeptService {
         }
         return dept.getLevel();
     }
-    
-    
 	@Override
 	public void save(DeptParam param) {
 		// TODO Auto-generated method stub
@@ -60,16 +59,51 @@ public class SysDeptServiceImpl implements SysDeptService {
                 .seq(param.getSeq()).remark(param.getRemark()).build();
 
         dept.setLevel(LevelUtil.calculateLevel(getLevel(param.getParentId()), param.getParentId()));
-        dept.setOperator("system"); //TODO
-        dept.setOperateIp("127.0.0.1");//TODO 
-//        dept.setOperator(RequestHolder.getCurrentUser().getUsername());
-//        dept.setOperateIp(IpUtil.getRemoteIp(RequestHolder.getCurrentRequest()));
+//        dept.setOperator("system"); //TODO
+//        dept.setOperateIp("127.0.0.1");//TODO 
+        dept.setOperator(RequestHolder.getCurrentUser().getUsername());
+        dept.setOperateIp(IpUtil.getRemoteIp(RequestHolder.getCurrentRequest()));
         dept.setOperateTime(new Date());
         sysDeptMapper.insertSelective(dept);
 //        sysLogService.saveDeptLog(null, dept);
 	}
 
 	
+	
+	
+    @Transactional
+    private void updateWithChild1(SysDept before, SysDept after) {
+    	sysDeptMapper.updateByPrimaryKey(after);
+        if (!after.getParentId().equals(before.getParentId())){
+        	updateChildDeptLevel(after);
+        }
+
+    }
+    private void updateChildDeptLevel(SysDept after) {
+        List<SysDept> deptList = sysDeptMapper.getChildDeptListById(after.getId());
+        if (CollectionUtils.isNotEmpty(deptList)) {
+            for(SysDept sysDept:deptList) {
+            	String level = LevelUtil.calculateLevel(getLevel(sysDept.getParentId()), sysDept.getParentId());
+            	int id = sysDept.getId();
+            	sysDeptMapper.updateLevel(level,id);
+            	updateChildDeptLevel(sysDept);
+            } 
+        }
+    }
+    private List<Integer> getChildDeptIdListById(Integer id){
+    	List<Integer> deptIdList1 = new ArrayList<Integer>();
+    	deptIdList1.add(id);
+        List<SysDept> deptList = sysDeptMapper.getChildDeptListById(id);
+        if (CollectionUtils.isNotEmpty(deptList)) {
+        	for(SysDept sysDept:deptList) {
+        		List<Integer> deptIdList2 = getChildDeptIdListById(sysDept.getId());
+        		for(Integer i:deptIdList2) {
+        			deptIdList1.add(i);
+        		}
+        	}
+        }
+    	return deptIdList1;
+    }
 	@Override
 	public void update(DeptParam param) {
 		// TODO Auto-generated method stub
@@ -77,19 +111,26 @@ public class SysDeptServiceImpl implements SysDeptService {
         if(checkExist1(param.getParentId(), param.getName())) {
             throw new ParamException("同一层级下存在相同名称的部门");
         }
+        List<Integer> idList = getChildDeptIdListById(param.getId());
+        for(Integer i:idList) {
+            if(i.equals(param.getParentId())) {
+            	throw new ParamException("自己以及子节点不能作为自己的父节点");
+            }
+        }
+
         SysDept before = sysDeptMapper.selectByPrimaryKey(param.getId());
         Preconditions.checkNotNull(before, "待更新的部门不存在");
-        if(checkExist1(param.getParentId(), param.getName())) {
-            throw new ParamException("同一层级下存在相同名称的部门");
-        }
+//        if(checkExist1(param.getParentId(), param.getName())) {
+//            throw new ParamException("同一层级下存在相同名称的部门");
+//        }
 
         SysDept after = SysDept.builder().id(param.getId()).name(param.getName()).parentId(param.getParentId())
                 .seq(param.getSeq()).remark(param.getRemark()).build();
         after.setLevel(LevelUtil.calculateLevel(getLevel(param.getParentId()), param.getParentId()));
-        after.setOperator("system"); //TODO
-        after.setOperateIp("127.0.0.1");//TODO 
-//        after.setOperator(RequestHolder.getCurrentUser().getUsername());
-//        after.setOperateIp(IpUtil.getRemoteIp(RequestHolder.getCurrentRequest()));
+//        after.setOperator("system"); //TODO
+//        after.setOperateIp("127.0.0.1");//TODO 
+        after.setOperator(RequestHolder.getCurrentUser().getUsername());
+        after.setOperateIp(IpUtil.getRemoteIp(RequestHolder.getCurrentRequest()));
         after.setOperateTime(new Date());
 
         updateWithChild1(before, after);
@@ -115,34 +156,7 @@ public class SysDeptServiceImpl implements SysDeptService {
 //        }
 //        sysDeptMapper.updateByPrimaryKey(after);
 //    }
-    @Transactional
-    private void updateWithChild1(SysDept before, SysDept after) {
-    	sysDeptMapper.updateByPrimaryKey(after);
-        if (!after.getParentId().equals(before.getParentId())){
-        	updateChildDeptLevel(after);
-        }
 
-    }
-    private void updateChildDeptLevel(SysDept after) {
-        List<SysDept> deptList = sysDeptMapper.getChildDeptListById(after.getId());
-        if (CollectionUtils.isNotEmpty(deptList)) {
-            for(SysDept sysDept:deptList) {
-            	String level = LevelUtil.calculateLevel(getLevel(sysDept.getParentId()), sysDept.getParentId());
-            	int id = sysDept.getId();
-            	sysDeptMapper.updateLevel(level,id);
-            	updateChildDeptLevel(sysDept);
-//            	List<SysDept> deptList2 = sysDeptMapper.getChildDeptListById(id);
-//            	if(CollectionUtils.isNotEmpty(deptList2)) {
-//            		for(SysDept sysDept2:deptList2) {
-//                    	String level2 = LevelUtil.calculateLevel(getLevel(sysDept2.getParentId()), sysDept2.getParentId());
-//                    	int id2 = sysDept2.getId();
-//                    	sysDeptMapper.updateLevel(level2,id2);
-//            			updateChildDeptLevel(sysDept2);
-//            		}
-//            	}	
-            } 
-        }
-    }
 	
 	@Override
 	public void delete(int deptId) {

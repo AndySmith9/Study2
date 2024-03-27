@@ -41,5 +41,7 @@ public interface SysUserMapper {
     int updateByPrimaryKeySelective(SysUser record);
     int countByDeptId(@Param("deptId") int deptId);
     List<SysUser> getPageByDeptId(@Param("deptId") int deptId, @Param("page") PageQuery page);
+    int countByDeptIdList(@Param("deptIdList") List<Integer> deptIdList);
+    List<SysUser> getPageByDeptIdList(@Param("deptIdList") List<Integer> deptIdList, @Param("page") PageQuery page);
     List<SysUser> getAll();
 }

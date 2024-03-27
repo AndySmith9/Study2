@@ -45,7 +45,7 @@
             total : total,
             pageNo : pageNo,
             maxPageNo : maxPageNo,
-            nextPageNo: pageNo >= maxPageNo ? maxPageNo : (pageNo + 1),
+            nextPageNo: pageNo >= maxPageNo ? maxPageNo : (pageNo + 1), 
             beforePageNo : pageNo == 1 ? 1 : (pageNo - 1),
             firstUrl : (pageNo == 1) ? '' : (url + paramStartChar + "pageNo=1&pageSize=" + pageSize),
             beforeUrl: (pageNo == 1) ? '' : (url + paramStartChar + "pageNo=" + (pageNo - 1) + "&pageSize=" + pageSize),
@@ -58,6 +58,7 @@
             e.preventDefault();
             $("#" + idElement + " .pageNo").val($(this).attr("data-target"));
             var targetUrl  = $(this).attr("data-url");
+            alert("pageNo:"+pageNo);
             if(targetUrl != '') {
                 $.ajax({
                     url : targetUrl,

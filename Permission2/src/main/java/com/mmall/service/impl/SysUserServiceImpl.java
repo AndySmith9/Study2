@@ -62,10 +62,10 @@ public class SysUserServiceImpl implements SysUserService {
         String encryptedPassword = MD5Util.encrypt(password);
         SysUser user = SysUser.builder().username(param.getUsername()).telephone(param.getTelephone()).mail(param.getMail())
                 .password(encryptedPassword).deptId(param.getDeptId()).status(param.getStatus()).remark(param.getRemark()).build();
-        user.setOperator("system"); //TODO
-        user.setOperateIp("127.0.0.1");//TODO 
-//        user.setOperator(RequestHolder.getCurrentUser().getUsername());
-//        user.setOperateIp(IpUtil.getRemoteIp(RequestHolder.getCurrentRequest()));
+//        user.setOperator("system"); //TODO
+//        user.setOperateIp("127.0.0.1");//TODO 
+        user.setOperator(RequestHolder.getCurrentUser().getUsername());
+        user.setOperateIp(IpUtil.getRemoteIp(RequestHolder.getCurrentRequest()));
         user.setOperateTime(new Date());
 
         // TODO: sendEmail
@@ -86,10 +86,10 @@ public class SysUserServiceImpl implements SysUserService {
         Preconditions.checkNotNull(before, "待更新的用户不存在");
         SysUser after = SysUser.builder().id(param.getId()).username(param.getUsername()).telephone(param.getTelephone()).mail(param.getMail())
                 .deptId(param.getDeptId()).status(param.getStatus()).remark(param.getRemark()).build();
-        after.setOperator("system"); //TODO
-        after.setOperateIp("127.0.0.1");//TODO 
-//        after.setOperator(RequestHolder.getCurrentUser().getUsername());
-//        after.setOperateIp(IpUtil.getRemoteIp(RequestHolder.getCurrentRequest()));
+//        after.setOperator("system"); //TODO
+//        after.setOperateIp("127.0.0.1");//TODO 
+        after.setOperator(RequestHolder.getCurrentUser().getUsername());
+        after.setOperateIp(IpUtil.getRemoteIp(RequestHolder.getCurrentRequest())); //TODO 
         after.setOperateTime(new Date());
         sysUserMapper.updateByPrimaryKeySelective(after);
 //        sysLogService.saveUserLog(before, after);
@@ -107,29 +107,31 @@ public class SysUserServiceImpl implements SysUserService {
 //            return PageResult.<SysUser>builder().total(count).data(list).build();
 //        }
         
-        
-        int returnCount = 0;
-        List<SysUser> returnList = new ArrayList<SysUser>();
         List<Integer> intList = getAllByDeptId(deptId);
-        for(Integer i:intList) {
-//        	System.out.println("i:"+i);
-        	int count = sysUserMapper.countByDeptId(i);
-            if (count > 0) {
-                List<SysUser> list = sysUserMapper.getPageByDeptId(i, page);
-                returnCount+=count;
-                for(SysUser sysUser:list) {
-                	returnList.add(sysUser);
-                }
-            }
+        int count = sysUserMapper.countByDeptIdList(intList);
+        if (count > 0) {
+            List<SysUser> list = sysUserMapper.getPageByDeptIdList(intList, page);
+            return PageResult.<SysUser>builder().total(count).data(list).build();
         }
-//        for(SysUser user1:returnList) {
-//        System.out.println(user1);	
+        
+        
+//        int returnCount = 0;
+//        List<SysUser> returnList = new ArrayList<SysUser>();
+//        List<Integer> intList = getAllByDeptId(deptId);
+//        for(Integer i:intList) {
+//        	int count = sysUserMapper.countByDeptId(i);
+//            if (count > 0) {
+//                List<SysUser> list = sysUserMapper.getPageByDeptId(i, page);
+//                returnCount+=count;
+//                for(SysUser sysUser:list) {
+//                	returnList.add(sysUser);
+//                }
+//            }
 //        }
-//        System.out.println("returnCount:"+returnCount);
-        return PageResult.<SysUser>builder().total(returnCount).data(returnList).build();
+//        return PageResult.<SysUser>builder().total(returnCount).data(returnList).build();
         
         
-//        return PageResult.<SysUser>builder().build();
+        return PageResult.<SysUser>builder().build();
     }
     public List<Integer> getAllByDeptId(int deptId){
     	List<Integer> sysDeptIdList1 = new ArrayList<Integer>();
@@ -137,10 +139,15 @@ public class SysUserServiceImpl implements SysUserService {
     	List<SysDept> sysDeptList2 = sysDeptMapper.getChildDeptListById(deptId);
     	if(sysDeptList2 != null) {
     		for(SysDept sysDept:sysDeptList2) {
-    			List<Integer> sysDeptIdList2 = getAllByDeptId(sysDept.getId());
-    			for(Integer i:sysDeptIdList2) {
+//    			sysDeptIdList1.add(sysDept.getId());
+//    			getAllByDeptId(sysDept.getId());
+    			    			
+    			List<Integer> sysDeptIdList3 = getAllByDeptId(sysDept.getId());
+//    			if(sysDeptIdList3 != null) {
+    			for(Integer i:sysDeptIdList3) {
     				sysDeptIdList1.add(i);
     			}
+//    		 }
     		}
     	}
     	

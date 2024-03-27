@@ -91,12 +91,12 @@
       order by ${orderByClause}
     </if>
   </select>
-  <select id="selectByPrimaryKey" parameterType="java.lang.Integer" resultMap="BaseResultMap">
+<!--   <select id="selectByPrimaryKey" parameterType="java.lang.Integer" resultMap="BaseResultMap">
     select 
     <include refid="Base_Column_List" />
     from sys_acl
     where id = #{id,jdbcType=INTEGER}
-  </select>
+  </select> -->
   <delete id="deleteByPrimaryKey" parameterType="java.lang.Integer">
     delete from sys_acl
     where id = #{id,jdbcType=INTEGER}
@@ -119,7 +119,213 @@
       #{operator,jdbcType=VARCHAR}, #{operateTime,jdbcType=TIMESTAMP}, #{operateIp,jdbcType=VARCHAR}
       )
   </insert>
-  <insert id="insertSelective" parameterType="com.mmall.model.SysAcl">
+<!--   <insert id="insertSelective" parameterType="com.mmall.model.SysAcl">
+    insert into sys_acl
+    <trim prefix="(" suffix=")" suffixOverrides=",">
+      <if test="id != null">
+        id,
+      </if>
+      <if test="code != null">
+        code,
+      </if>
+      <if test="name != null">
+        name,
+      </if>
+      <if test="aclModuleId != null">
+        acl_module_id,
+      </if>
+      <if test="url != null">
+        url,
+      </if>
+      <if test="type != null">
+        type,
+      </if>
+      <if test="status != null">
+        status,
+      </if>
+      <if test="seq != null">
+        seq,
+      </if>
+      <if test="remark != null">
+        remark,
+      </if>
+      <if test="operator != null">
+        operator,
+      </if>
+      <if test="operateTime != null">
+        operate_time,
+      </if>
+      <if test="operateIp != null">
+        operate_ip,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides=",">
+      <if test="id != null">
+        #{id,jdbcType=INTEGER},
+      </if>
+      <if test="code != null">
+        #{code,jdbcType=VARCHAR},
+      </if>
+      <if test="name != null">
+        #{name,jdbcType=VARCHAR},
+      </if>
+      <if test="aclModuleId != null">
+        #{aclModuleId,jdbcType=INTEGER},
+      </if>
+      <if test="url != null">
+        #{url,jdbcType=VARCHAR},
+      </if>
+      <if test="type != null">
+        #{type,jdbcType=INTEGER},
+      </if>
+      <if test="status != null">
+        #{status,jdbcType=INTEGER},
+      </if>
+      <if test="seq != null">
+        #{seq,jdbcType=INTEGER},
+      </if>
+      <if test="remark != null">
+        #{remark,jdbcType=VARCHAR},
+      </if>
+      <if test="operator != null">
+        #{operator,jdbcType=VARCHAR},
+      </if>
+      <if test="operateTime != null">
+        #{operateTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="operateIp != null">
+        #{operateIp,jdbcType=VARCHAR},
+      </if>
+    </trim>
+  </insert> -->
+  <select id="countByExample" parameterType="com.mmall.model.SysAclExample" resultType="java.lang.Long">
+    select count(*) from sys_acl
+    <if test="_parameter != null">
+      <include refid="Example_Where_Clause" />
+    </if>
+  </select>
+  <update id="updateByExampleSelective" parameterType="map">
+    update sys_acl
+    <set>
+      <if test="record.id != null">
+        id = #{record.id,jdbcType=INTEGER},
+      </if>
+      <if test="record.code != null">
+        code = #{record.code,jdbcType=VARCHAR},
+      </if>
+      <if test="record.name != null">
+        name = #{record.name,jdbcType=VARCHAR},
+      </if>
+      <if test="record.aclModuleId != null">
+        acl_module_id = #{record.aclModuleId,jdbcType=INTEGER},
+      </if>
+      <if test="record.url != null">
+        url = #{record.url,jdbcType=VARCHAR},
+      </if>
+      <if test="record.type != null">
+        type = #{record.type,jdbcType=INTEGER},
+      </if>
+      <if test="record.status != null">
+        status = #{record.status,jdbcType=INTEGER},
+      </if>
+      <if test="record.seq != null">
+        seq = #{record.seq,jdbcType=INTEGER},
+      </if>
+      <if test="record.remark != null">
+        remark = #{record.remark,jdbcType=VARCHAR},
+      </if>
+      <if test="record.operator != null">
+        operator = #{record.operator,jdbcType=VARCHAR},
+      </if>
+      <if test="record.operateTime != null">
+        operate_time = #{record.operateTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="record.operateIp != null">
+        operate_ip = #{record.operateIp,jdbcType=VARCHAR},
+      </if>
+    </set>
+    <if test="_parameter != null">
+      <include refid="Update_By_Example_Where_Clause" />
+    </if>
+  </update>
+  <update id="updateByExample" parameterType="map">
+    update sys_acl
+    set id = #{record.id,jdbcType=INTEGER},
+      code = #{record.code,jdbcType=VARCHAR},
+      name = #{record.name,jdbcType=VARCHAR},
+      acl_module_id = #{record.aclModuleId,jdbcType=INTEGER},
+      url = #{record.url,jdbcType=VARCHAR},
+      type = #{record.type,jdbcType=INTEGER},
+      status = #{record.status,jdbcType=INTEGER},
+      seq = #{record.seq,jdbcType=INTEGER},
+      remark = #{record.remark,jdbcType=VARCHAR},
+      operator = #{record.operator,jdbcType=VARCHAR},
+      operate_time = #{record.operateTime,jdbcType=TIMESTAMP},
+      operate_ip = #{record.operateIp,jdbcType=VARCHAR}
+    <if test="_parameter != null">
+      <include refid="Update_By_Example_Where_Clause" />
+    </if>
+  </update>
+<!--   <update id="updateByPrimaryKeySelective" parameterType="com.mmall.model.SysAcl">
+    update sys_acl
+    <set>
+      <if test="code != null">
+        code = #{code,jdbcType=VARCHAR},
+      </if>
+      <if test="name != null">
+        name = #{name,jdbcType=VARCHAR},
+      </if>
+      <if test="aclModuleId != null">
+        acl_module_id = #{aclModuleId,jdbcType=INTEGER},
+      </if>
+      <if test="url != null">
+        url = #{url,jdbcType=VARCHAR},
+      </if>
+      <if test="type != null">
+        type = #{type,jdbcType=INTEGER},
+      </if>
+      <if test="status != null">
+        status = #{status,jdbcType=INTEGER},
+      </if>
+      <if test="seq != null">
+        seq = #{seq,jdbcType=INTEGER},
+      </if>
+      <if test="remark != null">
+        remark = #{remark,jdbcType=VARCHAR},
+      </if>
+      <if test="operator != null">
+        operator = #{operator,jdbcType=VARCHAR},
+      </if>
+      <if test="operateTime != null">
+        operate_time = #{operateTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="operateIp != null">
+        operate_ip = #{operateIp,jdbcType=VARCHAR},
+      </if>
+    </set>
+    where id = #{id,jdbcType=INTEGER}
+  </update> -->
+  <update id="updateByPrimaryKey" parameterType="com.mmall.model.SysAcl">
+    update sys_acl
+    set code = #{code,jdbcType=VARCHAR},
+      name = #{name,jdbcType=VARCHAR},
+      acl_module_id = #{aclModuleId,jdbcType=INTEGER},
+      url = #{url,jdbcType=VARCHAR},
+      type = #{type,jdbcType=INTEGER},
+      status = #{status,jdbcType=INTEGER},
+      seq = #{seq,jdbcType=INTEGER},
+      remark = #{remark,jdbcType=VARCHAR},
+      operator = #{operator,jdbcType=VARCHAR},
+      operate_time = #{operateTime,jdbcType=TIMESTAMP},
+      operate_ip = #{operateIp,jdbcType=VARCHAR}
+    where id = #{id,jdbcType=INTEGER}
+  </update>
+  
+  
+  
+  
+  
+    <insert id="insertSelective" parameterType="com.mmall.model.SysAcl">
     insert into sys_acl
     <trim prefix="(" suffix=")" suffixOverrides=",">
       <if test="id != null">
@@ -198,75 +404,13 @@
       </if>
     </trim>
   </insert>
-  <select id="countByExample" parameterType="com.mmall.model.SysAclExample" resultType="java.lang.Long">
-    select count(*) from sys_acl
-    <if test="_parameter != null">
-      <include refid="Example_Where_Clause" />
-    </if>
+    <select id="selectByPrimaryKey" parameterType="java.lang.Integer" resultMap="BaseResultMap">
+    select 
+    <include refid="Base_Column_List" />
+    from sys_acl
+    where id = #{id,jdbcType=INTEGER}
   </select>
-  <update id="updateByExampleSelective" parameterType="map">
-    update sys_acl
-    <set>
-      <if test="record.id != null">
-        id = #{record.id,jdbcType=INTEGER},
-      </if>
-      <if test="record.code != null">
-        code = #{record.code,jdbcType=VARCHAR},
-      </if>
-      <if test="record.name != null">
-        name = #{record.name,jdbcType=VARCHAR},
-      </if>
-      <if test="record.aclModuleId != null">
-        acl_module_id = #{record.aclModuleId,jdbcType=INTEGER},
-      </if>
-      <if test="record.url != null">
-        url = #{record.url,jdbcType=VARCHAR},
-      </if>
-      <if test="record.type != null">
-        type = #{record.type,jdbcType=INTEGER},
-      </if>
-      <if test="record.status != null">
-        status = #{record.status,jdbcType=INTEGER},
-      </if>
-      <if test="record.seq != null">
-        seq = #{record.seq,jdbcType=INTEGER},
-      </if>
-      <if test="record.remark != null">
-        remark = #{record.remark,jdbcType=VARCHAR},
-      </if>
-      <if test="record.operator != null">
-        operator = #{record.operator,jdbcType=VARCHAR},
-      </if>
-      <if test="record.operateTime != null">
-        operate_time = #{record.operateTime,jdbcType=TIMESTAMP},
-      </if>
-      <if test="record.operateIp != null">
-        operate_ip = #{record.operateIp,jdbcType=VARCHAR},
-      </if>
-    </set>
-    <if test="_parameter != null">
-      <include refid="Update_By_Example_Where_Clause" />
-    </if>
-  </update>
-  <update id="updateByExample" parameterType="map">
-    update sys_acl
-    set id = #{record.id,jdbcType=INTEGER},
-      code = #{record.code,jdbcType=VARCHAR},
-      name = #{record.name,jdbcType=VARCHAR},
-      acl_module_id = #{record.aclModuleId,jdbcType=INTEGER},
-      url = #{record.url,jdbcType=VARCHAR},
-      type = #{record.type,jdbcType=INTEGER},
-      status = #{record.status,jdbcType=INTEGER},
-      seq = #{record.seq,jdbcType=INTEGER},
-      remark = #{record.remark,jdbcType=VARCHAR},
-      operator = #{record.operator,jdbcType=VARCHAR},
-      operate_time = #{record.operateTime,jdbcType=TIMESTAMP},
-      operate_ip = #{record.operateIp,jdbcType=VARCHAR}
-    <if test="_parameter != null">
-      <include refid="Update_By_Example_Where_Clause" />
-    </if>
-  </update>
-  <update id="updateByPrimaryKeySelective" parameterType="com.mmall.model.SysAcl">
+    <update id="updateByPrimaryKeySelective" parameterType="com.mmall.model.SysAcl">
     update sys_acl
     <set>
       <if test="code != null">
@@ -305,19 +449,50 @@
     </set>
     where id = #{id,jdbcType=INTEGER}
   </update>
-  <update id="updateByPrimaryKey" parameterType="com.mmall.model.SysAcl">
-    update sys_acl
-    set code = #{code,jdbcType=VARCHAR},
-      name = #{name,jdbcType=VARCHAR},
-      acl_module_id = #{aclModuleId,jdbcType=INTEGER},
-      url = #{url,jdbcType=VARCHAR},
-      type = #{type,jdbcType=INTEGER},
-      status = #{status,jdbcType=INTEGER},
-      seq = #{seq,jdbcType=INTEGER},
-      remark = #{remark,jdbcType=VARCHAR},
-      operator = #{operator,jdbcType=VARCHAR},
-      operate_time = #{operateTime,jdbcType=TIMESTAMP},
-      operate_ip = #{operateIp,jdbcType=VARCHAR}
-    where id = #{id,jdbcType=INTEGER}
-  </update>
+    <select id="countByNameAndAclModuleId" parameterType="map" resultType="int">
+    SELECT count(1)
+    FROM sys_acl
+    WHERE acl_module_id = #{aclModuleId}
+    AND name = #{name}
+<!--     <if test="id != null">
+      AND id != #{id}
+    </if> -->
+  </select>
+    <select id="countByAclModuleId" parameterType="map" resultType="int">
+    SELECT count(1)
+    FROM sys_acl
+    WHERE acl_module_id = #{aclModuleId}
+  </select>
+      <select id="countByAclModuleId1" parameterType="list" resultType="int">
+    SELECT count(1)
+    FROM sys_acl
+    WHERE acl_module_id in 
+    <foreach collection="aclIdList" item="aclId" open="(" close=")" separator="," >
+    #{aclId}
+    </foreach>
+  </select>
+    <select id="getPageByAclModuleId" parameterType="map" resultMap="BaseResultMap">
+    SELECT <include refid="Base_Column_List" />
+    FROM sys_acl
+    WHERE acl_module_id = #{aclModuleId}
+    ORDER BY seq ASC, name ASC
+    limit #{page.offset}, #{page.pageSize}
+  </select>
+      <select id="getIdListByAclModuleId" parameterType="int" resultType="java.lang.Integer">
+    SELECT id
+    FROM sys_acl
+    WHERE acl_module_id = #{aclModuleId}
+  </select>
+      <select id="getPageByAclModuleId1" parameterType="map" resultMap="BaseResultMap">
+    SELECT <include refid="Base_Column_List" />
+    FROM sys_acl
+    WHERE acl_module_id in
+    <foreach collection="aclIdList" item="aclId" open="(" close=")" separator="," >
+    #{aclId}
+    </foreach>
+    ORDER BY seq ASC, name ASC
+    limit #{page.offset}, #{page.pageSize}
+  </select>
+  
+  
 </mapper>

@@ -88,16 +88,16 @@
       order by ${orderByClause}
     </if>
   </select>
-  <select id="selectByPrimaryKey" parameterType="java.lang.Integer" resultMap="BaseResultMap">
+<!--   <select id="selectByPrimaryKey" parameterType="java.lang.Integer" resultMap="BaseResultMap">
     select 
     <include refid="Base_Column_List" />
     from sys_acl_module
     where id = #{id,jdbcType=INTEGER}
-  </select>
-  <delete id="deleteByPrimaryKey" parameterType="java.lang.Integer">
+  </select> -->
+<!--   <delete id="deleteByPrimaryKey" parameterType="java.lang.Integer">
     delete from sys_acl_module
     where id = #{id,jdbcType=INTEGER}
-  </delete>
+  </delete> -->
   <delete id="deleteByExample" parameterType="com.mmall.model.SysAclModuleExample">
     delete from sys_acl_module
     <if test="_parameter != null">
@@ -114,7 +114,7 @@
       #{remark,jdbcType=VARCHAR}, #{operator,jdbcType=VARCHAR}, #{operateTime,jdbcType=TIMESTAMP}, 
       #{operateIp,jdbcType=VARCHAR})
   </insert>
-  <insert id="insertSelective" parameterType="com.mmall.model.SysAclModule">
+<!--   <insert id="insertSelective" parameterType="com.mmall.model.SysAclModule">
     insert into sys_acl_module
     <trim prefix="(" suffix=")" suffixOverrides=",">
       <if test="id != null">
@@ -180,7 +180,7 @@
         #{operateIp,jdbcType=VARCHAR},
       </if>
     </trim>
-  </insert>
+  </insert> -->
   <select id="countByExample" parameterType="com.mmall.model.SysAclModuleExample" resultType="java.lang.Long">
     select count(*) from sys_acl_module
     <if test="_parameter != null">
@@ -287,4 +287,147 @@
       operate_ip = #{operateIp,jdbcType=VARCHAR}
     where id = #{id,jdbcType=INTEGER}
   </update>
+  
+  
+  
+  
+  
+  
+    <select id="getAllAclModule" resultMap="BaseResultMap">
+    SELECT <include refid="Base_Column_List" />
+    FROM sys_acl_module
+  </select>
+    <select id="countByNameAndParentId" parameterType="map" resultType="int">
+    SELECT count(1)
+    FROM sys_acl_module
+    WHERE name = #{name}
+    <if test="parentId != null">
+      AND parent_id = #{parentId}
+    </if>
+    <if test="id != null">
+      AND id != #{id}
+    </if>
+  </select>
+      <select id="countByNameAndParentId1" parameterType="map" resultType="int">
+    SELECT count(1)
+    FROM sys_acl_module
+    WHERE name = #{name}
+      AND parent_id = #{parentId}
+  </select>
+    <select id="selectByPrimaryKey" parameterType="java.lang.Integer" resultMap="BaseResultMap">
+    select 
+    <include refid="Base_Column_List" />
+    from sys_acl_module
+    where id = #{id,jdbcType=INTEGER}
+  </select>
+    <insert id="insertSelective" parameterType="com.mmall.model.SysAclModule">
+    insert into sys_acl_module
+    <trim prefix="(" suffix=")" suffixOverrides=",">
+      <if test="id != null">
+        id,
+      </if>
+      <if test="name != null">
+        name,
+      </if>
+      <if test="parentId != null">
+        parent_id,
+      </if>
+      <if test="level != null">
+        level,
+      </if>
+      <if test="seq != null">
+        seq,
+      </if>
+      <if test="status != null">
+        status,
+      </if>
+      <if test="remark != null">
+        remark,
+      </if>
+      <if test="operator != null">
+        operator,
+      </if>
+      <if test="operateTime != null">
+        operate_time,
+      </if>
+      <if test="operateIp != null">
+        operate_ip,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides=",">
+      <if test="id != null">
+        #{id,jdbcType=INTEGER},
+      </if>
+      <if test="name != null">
+        #{name,jdbcType=VARCHAR},
+      </if>
+      <if test="parentId != null">
+        #{parentId,jdbcType=INTEGER},
+      </if>
+      <if test="level != null">
+        #{level,jdbcType=VARCHAR},
+      </if>
+      <if test="seq != null">
+        #{seq,jdbcType=INTEGER},
+      </if>
+      <if test="status != null">
+        #{status,jdbcType=INTEGER},
+      </if>
+      <if test="remark != null">
+        #{remark,jdbcType=VARCHAR},
+      </if>
+      <if test="operator != null">
+        #{operator,jdbcType=VARCHAR},
+      </if>
+      <if test="operateTime != null">
+        #{operateTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="operateIp != null">
+        #{operateIp,jdbcType=VARCHAR},
+      </if>
+    </trim>
+  </insert>
+    <select id="getChildAclModuleListByLevel" resultMap="BaseResultMap">
+    select
+    <include refid="Base_Column_List" />
+    from sys_acl_module
+    WHERE level like #{level} || '.%'
+  </select>
+      <select id="getChildAclModuleListById" resultMap="BaseResultMap">
+    select
+    <include refid="Base_Column_List" />
+    from sys_acl_module
+    WHERE parent_id = #{id}
+  </select>
+    <update id="batchUpdateLevel" parameterType="map">
+    <foreach collection="sysAclModuleList" item="sysAclModule" separator=";">
+      UPDATE sys_acl_module
+      SET level = #{sysAclModule.level}
+      WHERE id = #{sysAclModule.id}
+    </foreach>
+  </update>
+      <update id="updateLevel" parameterType="map">
+      UPDATE sys_acl_module
+      SET level = #{level}
+      WHERE id = #{id}
+  </update>
+    <select id="countByParentId" parameterType="int" resultType="int">
+    SELECT count(1)
+    FROM sys_acl_module
+    WHERE parent_id = #{aclModuleId}
+  </select>
+    <delete id="deleteByPrimaryKey" parameterType="java.lang.Integer">
+    delete from sys_acl_module
+    where id = #{id,jdbcType=INTEGER}
+  </delete>
+<!--       <select id="getLevelById" parameterType="int" resultType="java.lang.String">
+    SELECT level
+    FROM sys_acl_module
+    WHERE id = #{id}
+  </select> -->
+        <select id="getIdListByAclModuleId" parameterType="int" resultType="java.lang.Integer">
+    SELECT id
+    FROM sys_acl_module
+    WHERE parent_id = #{aclModuleId}
+  </select>
 </mapper>

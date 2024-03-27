@@ -1,6 +1,6 @@
 package com.mmall.controller;
 
-import com.mmall.common.RequestHolder;
+
 import com.mmall.model.SysUser;
 import com.mmall.service.SysUserService;
 import com.mmall.util.MD5Util;
