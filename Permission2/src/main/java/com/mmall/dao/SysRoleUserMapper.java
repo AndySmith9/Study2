@@ -27,4 +27,15 @@ public interface SysRoleUserMapper {
     int updateByPrimaryKeySelective(SysRoleUser record);
 
     int updateByPrimaryKey(SysRoleUser record);
+    
+    
+    
+    
+    
+    void deleteByRoleId(@Param("roleId") int roleId);
+    void batchInsert(@Param("roleUserList") List<SysRoleUser> roleUserList);
+    List<Integer> getUserIdListByRoleId(@Param("roleId") int roleId);
+    List<Integer> getUserIdListByRoleIdList(@Param("roleIdList") List<Integer> roleIdList);
+    List<Integer> getRoleIdListByUserId(@Param("userId") int userId);
+    
 }

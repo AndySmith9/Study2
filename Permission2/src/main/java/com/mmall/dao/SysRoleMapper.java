@@ -10,21 +10,34 @@ public interface SysRoleMapper {
 
     int deleteByExample(SysRoleExample example);
 
-    int deleteByPrimaryKey(Integer id);
+//    int deleteByPrimaryKey(Integer id);
 
     int insert(SysRole record);
 
-    int insertSelective(SysRole record);
+//    int insertSelective(SysRole record);
 
     List<SysRole> selectByExample(SysRoleExample example);
 
-    SysRole selectByPrimaryKey(Integer id);
+//    SysRole selectByPrimaryKey(Integer id);
 
     int updateByExampleSelective(@Param("record") SysRole record, @Param("example") SysRoleExample example);
 
     int updateByExample(@Param("record") SysRole record, @Param("example") SysRoleExample example);
 
-    int updateByPrimaryKeySelective(SysRole record);
+//    int updateByPrimaryKeySelective(SysRole record);
 
     int updateByPrimaryKey(SysRole record);
+    
+    
+    
+    
+    int countByName(@Param("name") String name, @Param("id") Integer id);
+    int insertSelective(SysRole record);
+    SysRole selectByPrimaryKey(Integer id);
+    int updateByPrimaryKeySelective(SysRole record);
+    List<SysRole> getAll();
+    int deleteByPrimaryKey(Integer id);
+    
+    
+    
 }

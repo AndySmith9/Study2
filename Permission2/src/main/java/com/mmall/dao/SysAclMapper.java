@@ -43,6 +43,7 @@ public interface SysAclMapper {
     List<Integer> getIdListByAclModuleId(@Param("aclModuleId") int aclModuleId);
     int countByAclModuleId1(@Param("aclIdList") List<Integer> aclIdList);
     List<SysAcl> getPageByAclModuleId1(@Param("aclIdList") List<Integer> aclIdList, @Param("page") PageQuery page);
-    
-    
+    List<SysAcl> getAll();
+    List<SysAcl> getByIdList(@Param("idList") List<Integer> idList);
+    List<SysAcl> getByUrl(@Param("url") String url);
 }
